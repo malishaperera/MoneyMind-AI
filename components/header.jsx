@@ -1,11 +1,13 @@
-import React from 'react'
-import {Button} from "@/components/ui/button";
 import {SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import {Button} from "@/components/ui/button";
 import {LayoutDashboard, PenBox} from "lucide-react";
+import {checkUser} from "@/lib/checkUser";
 
-const Header = () => {
+const Header = async () => {
+
+    await checkUser();
     return (
         <div className="fixed top-0 w-full bg-white text-[#0d9488] z-50 border-b  shadow-md">
             <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -30,9 +32,7 @@ const Header = () => {
                             </Button>
                         </Link>
 
-                        <Link
-                            href={"/transaction"}
-                        >
+                        <Link href={"/transaction"}>
                             <Button
                                 variant="outline"
                                 className="flex items-center gap-2 border-[#0d9488] text-[#0d9488] hover:bg-[#facc15] hover:text-[#134e4a] transition">
