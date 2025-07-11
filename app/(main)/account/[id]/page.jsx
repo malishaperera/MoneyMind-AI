@@ -38,7 +38,9 @@ const AccountsPage = async ({ params }) => {
            {/*Transaction*/}
            <Suspense
            fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea"/>}>
-               <TransactionTable transaction={transactions}/>
+               {/*<TransactionTable transaction={transactions}/>*/}
+               <TransactionTable transactions={transactions} />
+               {/*csc*/}
            </Suspense>
 
 
