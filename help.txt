@@ -2,6 +2,12 @@ npm i date-fns << handle date efficiently
 https://recharts.org/en-US << Chart
 3.40
 
+https://www.inngest.com/ << Inngest  >> ex:user register  after send email
+
+arcjet << Painless security
+
+https://react.email/ << react email
+
 cd C:\Users\malis\Desktop\GDSE\MY-PROJECTS\moneymind-ai
 
 
