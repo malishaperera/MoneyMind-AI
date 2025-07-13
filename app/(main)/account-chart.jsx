@@ -61,21 +61,19 @@ const AccountChart = ({transactions}) => {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
                 <CardTitle className="text-base font-normal">Transaction Overview</CardTitle>
-                <Select defaultValue={dateRange} onValueChnage={setDataRange}>
+                <Select defaultValue={dateRange} onValueChange={(value) => setDataRange(value)}>
                     <SelectTrigger className="w-[140px]">
                         <SelectValue placeholder="Select range" />
                     </SelectTrigger>
                     <SelectContent>
-                         {Object.entries(DATE_RANGES).map(([key,{label}])=>{
-                             return(
-                                 <SelectItem key={key} value={key}>
-                                     {label}
-                                 </SelectItem>
-
-                             );
-                        })}
+                        {Object.entries(DATE_RANGES).map(([key, { label }]) => (
+                            <SelectItem key={key} value={key}>
+                                {label}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
+
             </CardHeader>
             <CardContent>
 
@@ -109,35 +107,25 @@ const AccountChart = ({transactions}) => {
                 <div className="h-[300px]">
 
 
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    width={500}
-                    height={300}
-                    data={filteredData}
-                    margin={{
-                      top: 10,
-                      right: 10,
-                      left: 10,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                      dataKey="pv"
-                      fill="#8884d8"
-                      activeBar={<Rectangle fill="pink" stroke="blue" />}
-                    />
-                    <Bar
-                      dataKey="uv"
-                      fill="#82ca9d"
-                      activeBar={<Rectangle fill="gold" stroke="purple" />}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            data={filteredData}
+                            margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis dataKey="date" />
+                            <YAxis
+                                fontSize={12}
+                                tickLine={false}
+                                axisLine={false}
+                                tickFormatter={(value) => `$${value}`}/>
+                            <Tooltip formatter={(value) => [`$${value}`,undefined]}/>
+                            <Legend />
+                            <Bar dataKey="income" fill="#4ade80" name="Income" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="expense" fill="#f87171" name="Expense" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                    </ResponsiveContainer>
+
                 </div>
             </CardContent>
         </Card>
