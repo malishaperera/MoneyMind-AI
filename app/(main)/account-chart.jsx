@@ -4,7 +4,8 @@ import {endOfDay, format, startOfDay, subDays} from "date-fns";
 import {Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, XAxis, YAxis} from "recharts";
-import {Tooltip} from "@/components/ui/tooltip";
+import { Tooltip } from "recharts";
+
 
 
 const DATE_RANGES ={
@@ -61,8 +62,10 @@ const AccountChart = ({transactions}) => {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
                 <CardTitle className="text-base font-normal">Transaction Overview</CardTitle>
-                <Select defaultValue={dateRange} onValueChange={(value) => setDataRange(value)}>
-                    <SelectTrigger className="w-[140px]">
+                {/*<Select defaultValue={dateRange} onValueChange={(value) => setDataRange(value)}>*/}
+                <Select defaultValue={dateRange} onValueChange={setDataRange}>
+
+                <SelectTrigger className="w-[140px]">
                         <SelectValue placeholder="Select range" />
                     </SelectTrigger>
                     <SelectContent>
@@ -72,6 +75,7 @@ const AccountChart = ({transactions}) => {
                             </SelectItem>
                         ))}
                     </SelectContent>
+
                 </Select>
 
             </CardHeader>
@@ -119,7 +123,10 @@ const AccountChart = ({transactions}) => {
                                 tickLine={false}
                                 axisLine={false}
                                 tickFormatter={(value) => `$${value}`}/>
-                            <Tooltip formatter={(value) => [`$${value}`,undefined]}/>
+                            <Tooltip
+                                formatter={(value, name) => [`$${value}`, name]}
+                                contentStyle={{ fontSize: "14px" }}
+                            />
                             <Legend />
                             <Bar dataKey="income" fill="#4ade80" name="Income" radius={[4, 4, 0, 0]} />
                             <Bar dataKey="expense" fill="#f87171" name="Expense" radius={[4, 4, 0, 0]} />
@@ -132,3 +139,5 @@ const AccountChart = ({transactions}) => {
   );
 };
 export default AccountChart;
+
+
