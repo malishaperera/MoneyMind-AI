@@ -8,6 +8,9 @@ arcjet << Painless security
 
 https://react.email/ << react email
 
+  <<https://resend.com
 cd C:\Users\malis\Desktop\GDSE\MY-PROJECTS\moneymind-ai
 
 
+npm run email
+ npx inngest-cli@latest dev
