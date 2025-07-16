@@ -33,7 +33,7 @@ const HeroSection = () => {
         </h1>
 
         <p className="text-lg md:text-xl text-[#475569] mb-8">
-          WealthIQ helps you take control of your money with real-time insights,
+          MoneyMind helps you take control of your money with real-time insights,
           smart budgeting, and AI-powered tracking.
         </p>
 

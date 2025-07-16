@@ -35,7 +35,7 @@ const Header = async () => {
               </Button>
             </Link>
 
-            <Link href={"/transaction"}>
+            <Link href={"/transaction/create"}>
               <Button
                 variant="outline"
                 className="flex items-center gap-2 border-[#0d9488] text-[#0d9488] hover:bg-[#facc15] hover:text-[#134e4a] transition"
