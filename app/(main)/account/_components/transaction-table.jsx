@@ -173,6 +173,7 @@ const TransactionTable = ({ transactions }) => {
 
   return (
     <div className="space-y-4">
+
       {deleteLoading && (
         <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
       )}
@@ -389,7 +390,7 @@ const TransactionTable = ({ transactions }) => {
                         <DropdownMenuItem
                           onClick={() =>
                             router.push(
-                              `/transactions/create?edit=${transaction.id}`
+                              `/transaction/create?edit=${transaction.id}`
                             )
                           }
                         >

@@ -4,7 +4,7 @@ import CreateAccountDrawer from "@/components/create-account-drawer";
 import { Plus } from "lucide-react";
 import { getUserAccounts } from "@/actions/dashboard";
 import AccountCard from "@/app/(main)/dashboard/_components/account.card";
-import {getCurrentBudget} from "@/actions/budget";
+import { getCurrentBudget } from "@/actions/budget";
 import BudgetProgress from "@/app/(main)/dashboard/budget-progress";
 
 async function DashboardPage() {
@@ -22,10 +22,11 @@ async function DashboardPage() {
       {/*Budget Progress*/}
 
       {defaultAccount && (
-          <BudgetProgress
-              initialBudget={budgetData?.budget}
-              currentExpenses={budgetData?.currentExpenses || 0}
-          />)}
+        <BudgetProgress
+          initialBudget={budgetData?.budget}
+          currentExpenses={budgetData?.currentExpenses || 0}
+        />
+      )}
 
       {/*Overview*/}
 

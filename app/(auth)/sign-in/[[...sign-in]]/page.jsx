@@ -1,7 +1,7 @@
-import React from 'react'
-import { SignIn} from "@clerk/nextjs";
+import React from "react";
+import { SignIn } from "@clerk/nextjs";
 
 const Page = () => {
-    return <SignIn/>
-}
-export default Page
+  return <SignIn />;
+};
+export default Page;
