@@ -171,5 +171,55 @@ export async function scanReceipt(file){
     console.error("Error scanning receipt",error.message);
     throw new Error("Failed to scan receipt");
   }
+}
 
+export async function getTransaction(id){
+  const {userId} = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: {clerkUserId:userId},
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const transaction = await db.transaction.findUnique({
+    where: {
+      id,
+      userId: user.id,
+    }
+  });
+  if (!transaction) throw new Error("Transaction not found");
+
+  return serializeAmount(transaction);
+}
+
+export async function updateTransaction(is,data){
+  try {
+    const {userId} = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: {
+        clerkUserId:userId
+      },
+    });
+    if (!user) throw new Error("User not found");
+
+    //
+    const originalTransaction = await db.transaction.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+      includes:{
+        account:true,
+      },
+    });
+
+    if (!originalTransaction) throw new Error("Transaction not found");
+  }catch (error) {
+
+
+  }
 }
