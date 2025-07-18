@@ -14,3 +14,4 @@ cd C:\Users\malis\Desktop\GDSE\MY-PROJECTS\moneymind-ai
 
 npm run email
 npx inngest-cli@latest dev
+npm i @google/generative-ai
