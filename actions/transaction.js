@@ -2,10 +2,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import {request} from "@arcjet/next";
+import { request } from "@arcjet/next";
 import aj from "@/lib/arject";
-import {GoogleGenerativeAI} from "@google/generative-ai";
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const serializeAmount = (obj) => ({
@@ -21,22 +20,22 @@ export async function createTransaction(data) {
     //Arcjet to add rate limiting
     const req = await request();
     //Check rate limit
-    const decision = await aj.protect(req,{
+    const decision = await aj.protect(req, {
       userId,
-      requested:1,
+      requested: 1,
     });
 
-    if (decision.isDenied()){
-      if (decision.reason.isRateLimit()){
-        const { remaining,reset} = decision.reason;
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        const { remaining, reset } = decision.reason;
         console.error({
-          code:"RATE_LIMIT_EXCEEDED",
-          details:{
+          code: "RATE_LIMIT_EXCEEDED",
+          details: {
             remaining,
-            resetInSeconds:reset,
+            resetInSeconds: reset,
           },
         });
-        throw new Error("Too many request. Please try again later.")
+        throw new Error("Too many request. Please try again later.");
       }
       throw new Error("Request Blocked");
     }
@@ -109,9 +108,9 @@ function calculateNextRecurringDate(startDate, interval) {
 }
 
 //AI Scanner
-export async function scanReceipt(file){
+export async function scanReceipt(file) {
   try {
-    const model = genAI.getGenerativeModel({model:"gemini-1.5-flash"});
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     //Convert ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
@@ -141,7 +140,7 @@ export async function scanReceipt(file){
 
     const result = await model.generateContent([
       {
-        inlineData:{
+        inlineData: {
           data: base64String,
           mimeType: file.type,
         },
@@ -151,34 +150,33 @@ export async function scanReceipt(file){
 
     const response = await result.response;
     const text = response.text();
-    const cleanedText = text.replace(/```(?:json)?\n?/g,"").trim();
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
     try {
       const data = JSON.parse(cleanedText);
-      return{
+      return {
         amount: parseFloat(data.amount),
         date: new Date(data.date),
         description: data.description,
         category: data.category,
         merchantName: data.merchantName,
       };
-    }catch (parseError) {
+    } catch (parseError) {
       console.log("Error parsing JSON response", parseError);
       throw new Error("Invalid response format from Gemini");
     }
-
-  }catch (error) {
-    console.error("Error scanning receipt",error.message);
+  } catch (error) {
+    console.error("Error scanning receipt", error.message);
     throw new Error("Failed to scan receipt");
   }
 }
 
-export async function getTransaction(id){
-  const {userId} = await auth();
+export async function getTransaction(id) {
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: {clerkUserId:userId},
+    where: { clerkUserId: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -187,21 +185,21 @@ export async function getTransaction(id){
     where: {
       id,
       userId: user.id,
-    }
+    },
   });
   if (!transaction) throw new Error("Transaction not found");
 
   return serializeAmount(transaction);
 }
 
-export async function updateTransaction(id,data){
+export async function updateTransaction(id, data) {
   try {
-    const {userId} = await auth();
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     const user = await db.user.findUnique({
       where: {
-        clerkUserId:userId
+        clerkUserId: userId,
       },
     });
     if (!user) throw new Error("User not found");
@@ -212,8 +210,8 @@ export async function updateTransaction(id,data){
         id,
         userId: user.id,
       },
-      include:{
-        account:true,
+      include: {
+        account: true,
       },
     });
 
@@ -221,16 +219,16 @@ export async function updateTransaction(id,data){
 
     //Calculate balance changes
     const oldBalanceChange =
-        originalTransaction.type === "EXPENSE"
-    ? -originalTransaction.amount.toNumber()
-            : originalTransaction.amount.toNumber();
+      originalTransaction.type === "EXPENSE"
+        ? -originalTransaction.amount.toNumber()
+        : originalTransaction.amount.toNumber();
 
     const newBalanceChange =
-        data.type === "EXPENSE" ? -data.amount : data.amount;
+      data.type === "EXPENSE" ? -data.amount : data.amount;
 
     const netBalanceChange = newBalanceChange - oldBalanceChange;
 
-    const transaction = await db.$transaction(async (tx) =>{
+    const transaction = await db.$transaction(async (tx) => {
       const updated = await tx.transaction.update({
         where: {
           id,
@@ -239,14 +237,14 @@ export async function updateTransaction(id,data){
         data: {
           ...data,
           nextRecurringDate:
-           data.isRecurring && data.recurringInterval
-          ? calculateNextRecurringDate(data.date, data.recurringInterval)
-               : null,
+            data.isRecurring && data.recurringInterval
+              ? calculateNextRecurringDate(data.date, data.recurringInterval)
+              : null,
         },
       });
       //Update account balance
       await tx.account.update({
-        where: {id: data.accountId },
+        where: { id: data.accountId },
         data: {
           balance: {
             increment: netBalanceChange,
@@ -254,12 +252,12 @@ export async function updateTransaction(id,data){
         },
       });
       return updated;
-    })
+    });
     revalidatePath("/dashboard");
     revalidatePath(`/account/${data.accountId}`);
 
-    return {success: true, data: serializeAmount(transaction)};
-  }catch (error) {
+    return { success: true, data: serializeAmount(transaction) };
+  } catch (error) {
     throw new Error(error.message);
   }
 }
