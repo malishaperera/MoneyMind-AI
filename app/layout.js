@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,36 +42,48 @@ export default function RootLayout({ children }) {
                   </h3>
                   <ul className="space-y-1 text-[#94a3b8]">
                     <li>
-                      <a
-                        href="/dashboard"
-                        className="hover:text-[#facc15] transition-colors"
-                      >
+                      {/*<a*/}
+                      {/*  href="/dashboard"*/}
+                      {/*  className="hover:text-[#facc15] transition-colors"*/}
+                      {/*>*/}
+                      {/*  Dashboard*/}
+                      {/*</a>*/}
+                      <Link href="/dashboard" className="hover:text-[#facc15] transition-colors">
                         Dashboard
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="/account"
-                        className="hover:text-[#facc15] transition-colors"
-                      >
-                        Dashboard
-                      </a>
+                      {/*<a*/}
+                      {/*  href="/account"*/}
+                      {/*  className="hover:text-[#facc15] transition-colors"*/}
+                      {/*>*/}
+                      {/*  Dashboard*/}
+                      {/*</a>*/}
+                      <Link href="/account" className="hover:text-[#facc15] transition-colors">
+                        Account
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="/pricing"
-                        className="hover:text-[#facc15] transition-colors"
-                      >
+                      {/*<a*/}
+                      {/*  href="/pricing"*/}
+                      {/*  className="hover:text-[#facc15] transition-colors"*/}
+                      {/*>*/}
+                      {/*  Pricing*/}
+                      {/*</a>*/}
+                      <Link href="/pricing" className="hover:text-[#facc15] transition-colors">
                         Pricing
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="/contact"
-                        className="hover:text-[#facc15] transition-colors"
-                      >
+                      {/*<a*/}
+                      {/*  href="/contact"*/}
+                      {/*  className="hover:text-[#facc15] transition-colors"*/}
+                      {/*>*/}
+                      {/*  Contact*/}
+                      {/*</a>*/}
+                      <Link href="/contact" className="hover:text-[#facc15] transition-colors">
                         Contact
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
