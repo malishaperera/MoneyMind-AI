@@ -1,10 +1,11 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/lib/inngest/client";
 import {
-  checkBudgetAlert, generateMonthlyReports,
+  checkBudgetAlert,
+  generateMonthlyReports,
   helloWorld,
   processRecurringTransaction,
-  triggerRecurringTransactions
+  triggerRecurringTransactions,
 } from "@/lib/inngest/functions";
 
 // Create an API that serves zero functions

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionSchema } from "@/app/lib/schema";
-import {createTransaction, updateTransaction} from "@/actions/transaction";
+import { createTransaction, updateTransaction } from "@/actions/transaction";
 import useFetch from "@/hooks/use-fetch";
 import {
   Select,
@@ -21,15 +21,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import {CalendarIcon, Loader2} from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
-import {useRouter, useSearchParams} from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import ReceiptScanner from "@/app/(main)/transaction/_components/receipt-scanner";
 
-const AddTransactionForm = ({ accounts, categories
-,editMode = false,initialData =null}) => {
+const AddTransactionForm = ({
+  accounts,
+  categories,
+  editMode = false,
+  initialData = null,
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -45,27 +49,27 @@ const AddTransactionForm = ({ accounts, categories
   } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues:
-        editMode && initialData?{
-          type: initialData.type,
-          amount: initialData.amount.toString(),
-          description: initialData.description,
-          accountId: initialData.accountId,
-          category: initialData.category,
-          date: new Date(initialData.date),
-          isRecurring: initialData.isRecurring,
-          ...(initialData.recurringInterval && {
-            recurringInterval: initialData.recurringInterval,
-          }),
-
-            }:
-  {
-      type: "EXPENSE",
-      amount: "",
-      description: "",
-      accountId: accounts.find((ac) => ac.isDefault)?.id,
-      date: new Date(),
-      isRecurring: false,
-    },
+      editMode && initialData
+        ? {
+            type: initialData.type,
+            amount: initialData.amount.toString(),
+            description: initialData.description,
+            accountId: initialData.accountId,
+            category: initialData.category,
+            date: new Date(initialData.date),
+            isRecurring: initialData.isRecurring,
+            ...(initialData.recurringInterval && {
+              recurringInterval: initialData.recurringInterval,
+            }),
+          }
+        : {
+            type: "EXPENSE",
+            amount: "",
+            description: "",
+            accountId: accounts.find((ac) => ac.isDefault)?.id,
+            date: new Date(),
+            isRecurring: false,
+          },
   });
 
   const {
@@ -93,25 +97,24 @@ const AddTransactionForm = ({ accounts, categories
 
   useEffect(() => {
     if (transactionResult?.success && !transactionLoading) {
-
       toast.success(
-          editMode
-              ? "Transaction updated successfully."
-              :"Transaction successfully successfully"
+        editMode
+          ? "Transaction updated successfully."
+          : "Transaction successfully successfully"
       );
 
       reset();
       router.push(`/account/${transactionResult.data.accountId}`);
     }
-  }, [transactionResult, transactionLoading,editMode]);
+  }, [transactionResult, transactionLoading, editMode]);
 
   const filteredCategories = categories.filter(
     (category) => category.type === type
   );
-  const handleScanComplete = (scannedData) =>{
-    if(scannedData){
-      setValue("amount",scannedData.amount.toString());
-      setValue("date",new Date(scannedData.date));
+  const handleScanComplete = (scannedData) => {
+    if (scannedData) {
+      setValue("amount", scannedData.amount.toString());
+      setValue("date", new Date(scannedData.date));
       if (scannedData.description) {
         setValue("description", scannedData.description);
       }
@@ -124,7 +127,7 @@ const AddTransactionForm = ({ accounts, categories
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       {/*AI Receipt Scanner*/}
-      {!editMode && <ReceiptScanner onScanComplete={handleScanComplete}/>}
+      {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
       {/* Type */}
       <div className="space-y-2">
@@ -311,19 +314,18 @@ const AddTransactionForm = ({ accounts, categories
         <Button
           type="submit"
           className=" bg-[#0d9488] hover:bg-[#0f766e]"
-          disabled={transactionLoading}>
-          {transactionLoading?(
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-                {editMode ? "Updating...":"Creating..."}
-              </>
-
-          ):editMode ? (
-              "Update Transaction"
+          disabled={transactionLoading}
+        >
+          {transactionLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {editMode ? "Updating..." : "Creating..."}
+            </>
+          ) : editMode ? (
+            "Update Transaction"
           ) : (
-              "Create Transaction"
+            "Create Transaction"
           )}
-
         </Button>
       </div>
     </form>

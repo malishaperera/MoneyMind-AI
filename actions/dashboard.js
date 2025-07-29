@@ -101,7 +101,7 @@ export async function getUserAccounts() {
   return serializedAccounts;
 }
 
-export async function getDashboardData(){
+export async function getDashboardData() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -109,7 +109,7 @@ export async function getDashboardData(){
     where: { clerkUserId: userId },
   });
 
-  if (!user){
+  if (!user) {
     throw new Error("User not found");
   }
 

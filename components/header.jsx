@@ -12,13 +12,23 @@ const Header = async () => {
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/">
           <Image
-            src={"/logo.jpg"}
+            src={"/logo-1.jpg"}
             alt="AI Finance logo"
             height={100}
             width={200}
             className="h-12 w-auto object-contain"
           />
         </Link>
+        {/* Decorative Money Line */}
+        <div className="hidden md:flex flex-1 items-center justify-center px-4">
+          <div className="w-full max-w-2xl h-1 bg-[repeating-linear-gradient(to_right,transparent_0px,transparent_10px,#0d9488_10px,#0d9488_20px)] relative">
+            <div className="absolute inset-0 flex items-center justify-center space-x-5">
+              {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-[#0d9488] font-bold text-lg">$</span>
+              ))}
+            </div>
+          </div>
+        </div>
 
         <div className="flex items-center space-x-4">
           <SignedIn>
